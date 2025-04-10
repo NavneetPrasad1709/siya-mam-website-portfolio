@@ -1,53 +1,63 @@
+"use client";
+
 import Image from 'next/image';
+import { useEffect } from 'react';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
-const Banner = () => {
+const HeroSection = () => {
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: true });
+  }, []);
 
-    return (
-        <div id="home-section" className='bg-lightkblue'>
-            <div className="mx-auto max-w-7xl pt-20 sm:pb-24 px-6">
+  return (
+    <section
+      className="relative w-full h-screen flex items-center justify-center overflow-hidden "
+      style={{ fontFamily: "'Outfit', sans-serif" }}
+    >
+      {/* Background Image */}
+      <Image
+        src="/assets/banner/mainimage.jpg"
+        alt="Dr. Siya Seth"
+        layout="fill"
+        objectFit="cover"
+        quality={100}
+        priority
+        className="z-0"
+      />
 
-                <div className='grid grid-cols-1 lg:grid-cols-12 space-x-1'>
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/80 z-10" />
 
-                    <div className='col-span-6 flex flex-col justify-evenly'>
-                        <div className='flex gap-2 mx-auto lg:mx-0'>
-                            <Image src="/assets/banner/check.svg" alt="check-image" width={20} height={20} />
-                            <h3 className='text-kellygreen text-sm font-semibold text-center lg:text-start'>Get 30% off on first enroll</h3>
-                        </div>
-                        <h1 className='text-midnightblue text-4xl sm:text-5xl font-semibold text-center lg:text-start lh-120 pt-5 lg:pt-0'>Advance your engineering skills with us.</h1>
-                        <h3 className='text-charcoal text-lg font-normal text-center lg:text-start opacity-75 pt-5 lg:pt-0'>Build skills with our courses and mentor from world-class companies.</h3>
+      {/* Content */}
+      <div className="relative z-20 text-center px-4 max-w-3xl" data-aos="fade-up">
+        <h1 className="text-white text-4xl sm:text-6xl md:text-7xl font-extrabold leading-tight tracking-tight drop-shadow-xl">
+          Empowering <span className="text-blue-400">Lives</span><br />
+          Through <span className="text-pink-400">Wellness</span>
+        </h1>
 
-                        <div className="relative text-white focus-within:text-white flex flex-row-reverse input-shadow rounded-full pt-5 lg:pt-0">
-                            <input type="Email address" name="q" className="py-6 lg:py-8 text-lg w-full text-black opacity-75 rounded-full pl-8 focus:outline-none focus:text-black" placeholder="search courses..." autoComplete="off" />
-                            <div className="absolute inset-y-0 right-0 flex items-center pr-2 pt-5 lg:pt-0">
-                                <button type="submit" className="p-3 lg:p-5 focus:outline-none focus:shadow-outline bg-ultramarine hover:bg-midnightblue duration-150 ease-in-out rounded-full">
-                                    <Image src={'/assets/banner/search.svg'} alt="inputicon" width={30} height={30} />
-                                </button>
-                            </div>
-                        </div>
+        <p
+          className="text-white text-lg sm:text-xl mt-6 italic font-light leading-relaxed max-w-2xl mx-auto"
+          data-aos="fade-up"
+          data-aos-delay="300"
+        >
+          Transforming health and mindset with a holistic approach to life, healing, and self-growth.
+        </p>
 
-                        <div className='flex items-center justify-between pt-10 lg:pt-4'>
-                            <div className='flex gap-2'>
-                                <Image src="/assets/banner/check-circle.svg" alt="check-image" width={30} height={30} className='smallImage'/>
-                                <p className='text-sm sm:text-lg font-normal text-black'>Flexible</p>
-                            </div>
-                            <div className='flex gap-2'>
-                                <Image src="/assets/banner/check-circle.svg" alt="check-image" width={30} height={30} className='smallImage'/>
-                                <p className='text-sm sm:text-lg font-normal text-black'>Learning path</p>
-                            </div>
-                            <div className='flex gap-2'>
-                                <Image src="/assets/banner/check-circle.svg" alt="check-image" width={30} height={30} className='smallImage'/>
-                                <p className='text-sm sm:text-lg font-normal text-black'>Community</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className='col-span-6 flex justify-center'>
-                        <Image src="/assets/banner/mahila.png" alt="nothing" width={1000} height={805} />
-                    </div>
-                </div>
-            </div>
+        <div data-aos="zoom-in" data-aos-delay="500">
+          <button className="mt-8 px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white rounded-full text-lg font-medium transition duration-300 shadow-lg">
+            Start Your Journey
+          </button>
         </div>
-    )
-}
+      </div>
 
-export default Banner;
+      {/* Google Fonts: Outfit */}
+      <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap"
+        rel="stylesheet"
+      />
+    </section>
+  );
+};
+
+export default HeroSection;

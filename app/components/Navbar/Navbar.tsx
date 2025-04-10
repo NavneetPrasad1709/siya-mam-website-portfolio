@@ -1,130 +1,95 @@
+"use client";
+
 import { Disclosure } from '@headlessui/react';
 import Link from 'next/link';
-import React, { useState } from 'react';
-import { Bars3Icon } from '@heroicons/react/24/outline';
-import Drawer from "./Drawer";
-import Drawerdata from "./Drawerdata";
-import Signdialog from "./Signdialog";
-// import Registerdialog from "./Registerdialog";
+import { usePathname } from 'next/navigation';
+import { Bars3Icon, XMarkIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import { useEffect, useState } from 'react';
 
-interface NavigationItem {
-    name: string;
-    href: string;
-    current: boolean;
-}
-
-const navigation: NavigationItem[] = [
-    { name: 'Home', href: '#/', current: true },
-    { name: 'About', href: '#courses', current: false },
-    { name: 'Courses', href: '#mentor', current: false },
-    { name: 'Blogs', href: '/', current: false },
-    { name: 'Contact', href: '#testimonial', current: false },
+const navigation = [
+  { name: 'Courses', href: '/courses' },
+  { name: 'Books', href: '/books' },
+  { name: 'Public Speaking', href: '/speaking' },
+  { name: 'Contact', href: '/contact' },
+  { name: 'About', href: '/about' },
 ];
 
-function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(' ');
-}
+export default function Navbar() {
+  const pathname = usePathname();
+  const [isScrolled, setIsScrolled] = useState(false);
 
-const CustomLink = ({ href, onClick, children }: { href: string; onClick: () => void; children: React.ReactNode }) => {
-    return (
-        <Link href={href} passHref>
-            <span
-                onClick={onClick}
-                className="px-3 py-4 text-lg font-normal"
-            >
-                {children}
-            </span>
-        </Link>
-    );
-};
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
+  return (
+    <Disclosure as="nav">
+      {({ open }) => (
+        <>
+          <div className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-black/80 backdrop-blur-md shadow-md' : 'bg-black'}`}>
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="flex h-20 justify-between items-center">
+                
+                {/* Logo */}
+                <Link href="/" className="flex-shrink-0">
+                  <img src="/assets/logo/logo_white.png" alt="Logo" className="h-10 w-auto" />
+                </Link>
 
-const Navbar = () => {
-    const [isOpen, setIsOpen] = React.useState(false);
-
-    const [currentLink, setCurrentLink] = useState('/');
-
-    const handleLinkClick = (href: string) => {
-        setCurrentLink(href);
-    };
-
-    return (
-        <Disclosure as="nav" className="navbar">
-            <>
-                <div className="mx-auto max-w-7xl px-6 py-4 lg:px-8">
-                    <div className="relative flex h-12 md:h-20 items-center justify-between">
-                        <div className="flex flex-1 items-center sm:items-stretch sm:justify-start">
-
-                            {/* LOGO */}
-
-                            <div className="flex flex-shrink-0 items-center">
-                                <img
-                                    className="block h-12 w-40 lg:hidden"
-                                    src={'/assets/logo/logo_black.png'}
-                                    alt="dsign-logo"
-                                />
-                                <img
-                                    className="hidden h-full w-60 lg:block"
-                                    src={'/assets/logo/logo_black.png'}
-                                    alt="dsign-logo"
-                                />
-                            </div>
-
-                            {/* LINKS */}
-
-                            <div className="hidden lg:block m-auto">
-                                <div className="flex space-x-4">
-                                    {navigation.map((item) => (
-                                        <CustomLink
-                                            key={item.name}
-                                            href={item.href}
-                                            onClick={() => handleLinkClick(item.href)}
-                                        >
-                                            <span
-                                                className={classNames(
-                                                    item.href === currentLink ? 'underline-links' : 'text-slategray',
-                                                    'px-3 py-4 text-lg font-normal opacity-75 hover:opacity-100'
-                                                )}
-                                                aria-current={item.href ? 'page' : undefined}
-                                            >
-                                                {item.name}
-                                            </span>
-                                        </CustomLink>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* SIGNIN DIALOG */}
-
-                        {/* <Signdialog />÷ */}
-
-
-                        {/* REGISTER DIALOG */}
-
-                        {/* <Registerdialog /> */}
-
-
-                        {/* DRAWER FOR MOBILE VIEW */}
-
-                        {/* DRAWER ICON */}
-
-                        <div className='block lg:hidden'>
-                            <Bars3Icon className="block h-6 w-6" aria-hidden="true" onClick={() => setIsOpen(true)} />
-                        </div>
-
-                        {/* DRAWER LINKS DATA */}
-
-                        <Drawer isOpen={isOpen} setIsOpen={setIsOpen}>
-                            <Drawerdata />
-                        </Drawer>
-
-
-                    </div>
+                {/* Desktop Links */}
+                <div className="hidden lg:flex space-x-10 text-lg font-semibold text-white">
+                  {navigation.map((item) => (
+                    <Link key={item.name} href={item.href}>
+                      <span
+                        className={`group relative transition duration-300 cursor-pointer ${
+                          pathname === item.href ? 'text-blue-400' : 'hover:text-blue-400'
+                        }`}
+                      >
+                        {item.name}
+                        {['Courses', 'Content', 'Books'].includes(item.name) && (
+                          <ChevronDownIcon className="inline-block ml-1 h-4 w-4" />
+                        )}
+                        <span
+                          className={`absolute left-0 -bottom-1 h-0.5 bg-blue-400 w-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left ${
+                            pathname === item.href ? 'scale-x-100' : ''
+                          }`}
+                        />
+                      </span>
+                    </Link>
+                  ))}
                 </div>
-            </>
-        </Disclosure>
-    );
-};
 
-export default Navbar;
+                {/* Mobile menu button */}
+                <div className="lg:hidden">
+                  <Disclosure.Button className="inline-flex items-center justify-center p-2 text-white hover:text-blue-400 focus:outline-none">
+                    {open ? (
+                      <XMarkIcon className="block h-6 w-6" />
+                    ) : (
+                      <Bars3Icon className="block h-6 w-6" />
+                    )}
+                  </Disclosure.Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile Panel */}
+            <Disclosure.Panel className="lg:hidden bg-black text-white px-4 pt-4 pb-6 space-y-3 text-base">
+              {navigation.map((item) => (
+                <Link key={item.name} href={item.href}>
+                  <span
+                    className={`block px-3 py-2 rounded-md ${
+                      pathname === item.href ? 'text-blue-400' : 'hover:text-blue-400'
+                    }`}
+                  >
+                    {item.name}
+                  </span>
+                </Link>
+              ))}
+            </Disclosure.Panel>
+          </div>
+        </>
+      )}
+    </Disclosure>
+  );
+}
